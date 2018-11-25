@@ -1,0 +1,27 @@
+{
+  "name": "joker.puremvc.game",
+  "version": "0.0.1",
+  "description": "Joker game build upon PIXI.JS and PureMVC",
+  "main": "index.js",
+  "scripts": {
+    "watch:scripts": "webpack --config webpack.config.js --watch --mode development",
+    "compile:scripts": "webpack --config webpack.config.js --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WilliePart2/Joker.Game.git"
+  },
+  "author": "WilliePart2",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WilliePart2/Joker.Game/issues"
+  },
+  "homepage": "https://github.com/WilliePart2/Joker.Game#readme",
+  "devDependencies": {
+    "ts-loader": "^5.3.0",
+    "typescript": "^3.1.6",
+    "webpack": "^4.26.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
+  }
+}
