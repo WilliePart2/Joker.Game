@@ -1,7 +1,7 @@
 let path = require('path');
 
 module.exports = {
-    entry: './src/index.ts',
+    entry: ['babel-polyfill', './src/index.ts'],
     devtool: 'inline-source-map',
     output: {
         path: path.resolve(__dirname, './dist'),
@@ -15,7 +15,10 @@ module.exports = {
             {
                 test: /\.ts$/,
                 exclude: /node_modules/,
-                use: 'ts-loader'
+                use: [
+                    'babel-loader',
+                    'ts-loader'
+                ]
             }
         ]
     }

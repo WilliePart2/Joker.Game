@@ -1,0 +1,4 @@
+[submodule "PureMVCMulticore"]
+	path = PureMVCMulticore
+	url = https://github.com/WilliePart2/PureMVCMulticore.git
+	branch = master

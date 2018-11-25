@@ -1,3 +1,4 @@
-import TestModule from './test.module';
+import {StartupGame} from "./game.startup";
 
-TestModule();
+// @ts-ignore
+window['JOKER'] = StartupGame;
