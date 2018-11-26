@@ -3,7 +3,8 @@ import {Facade} from "../PureMVCMulticore/core/pureMVC/facade/Facade";
 import {Command} from "../PureMVCMulticore/core/pureMVC/command/Command";
 import {Notification} from "../PureMVCMulticore/core/pureMVC/notification/Notification";
 import {GameStartupCommand} from "./game/controllers/game.startup.command";
-import {MainGameModule} from "./module.names";
+import {BackgroundModule, MainGameModule} from "./module.names";
+import {BackgroundStartupCommand} from "./modules/background/controllers/background.startup.command";
 
 export class StartupGame {
     constructor (gameInitData: IGameStartupData) {
@@ -20,7 +21,7 @@ export class StartupGame {
     }
 
     startupMainGameModules (gameInitData: IGameInitData) {
-
+        this.startupModule(BackgroundModule, BackgroundStartupCommand, gameInitData);
     }
 
     startupModule <T>(moduleNotification: Notification<any>, moduleCommandRef: Function, initialData?: T): Promise<any> {
