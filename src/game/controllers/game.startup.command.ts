@@ -15,7 +15,7 @@ export class GameStartupCommand extends GameModule {
 
     registerCommands () {
         this.facade().registerCommand(MountGameRenderer, MountGameRendererCommand);
-    }
+    ``}
 
     registerMediators () {
         this.facade().registerMediator(GameAreaMediator.NAME, new GameAreaMediator(this.facadeKey));

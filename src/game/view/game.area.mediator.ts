@@ -21,7 +21,6 @@ export class GameAreaMediator extends Mediator {
             initRendererData.gameContainer.appendChild(game.view);
     }
 
-
     listNotificationInterests(): Notification<any>[] {
         return [
             PerformMountingGame
