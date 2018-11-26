@@ -1,7 +1,7 @@
 import {BaseCommand} from "../../../PureMVCMulticore/core/pureMVC/command/BaseCommand";
 
 export class GameModule extends BaseCommand {
-    execute(notification: any): any {
+    async execute(notification: any): Promise<any> {
         this.registerCommands();
         this.registerMediators(notification);
         this.registerProxies(notification);

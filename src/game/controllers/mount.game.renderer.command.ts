@@ -1,7 +1,7 @@
 import {BaseCommand} from "../../../PureMVCMulticore/core/pureMVC/command/BaseCommand";
 import {IGameInitData, IGameStartupData, IInitGameAreaData} from "../../game.core/common.interfaces/game.data";
 import {Notification} from "../../../PureMVCMulticore/core/pureMVC/notification/Notification";
-import {PerformMountingGame} from "../game.main.module.notifications";
+import {PerformMountingGame, StartupMainModules} from "../game.main.module.notifications";
 import {GameAreaMediator} from "../view/game.area.mediator";
 
 export class MountGameRendererCommand extends BaseCommand {
@@ -17,6 +17,8 @@ export class MountGameRendererCommand extends BaseCommand {
 
         // let rendererMediator: GameAreaMediator = this.facade().retrieveMediator(GameAreaMediator.NAME) as GameAreaMediator;
         // rendererMediator.createGameRenderer(dataForMounting);
-        this.facade().sendNotification(PerformMountingGame, dataForMounting);
+        let gameStage: PIXI.Container = await this.facade().sendNotification(PerformMountingGame, dataForMounting);
+        return {stage: gameStage} as IGameInitData;
+        // this.facade().sendNotification(StartupMainModules, {stage: gameStage} as IGameInitData);
     }
 }

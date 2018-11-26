@@ -1,21 +1,25 @@
-import {IGameStartupData} from "./game.core/common.interfaces/game.data";
+import {IGameInitData, IGameStartupData} from "./game.core/common.interfaces/game.data";
 import {Facade} from "../PureMVCMulticore/core/pureMVC/facade/Facade";
 import {Command} from "../PureMVCMulticore/core/pureMVC/command/Command";
 import {Notification} from "../PureMVCMulticore/core/pureMVC/notification/Notification";
-import {MainGameModule} from "./CNotifications";
 import {GameStartupCommand} from "./game/controllers/game.startup.command";
+import {MainGameModule} from "./module.names";
 
 export class StartupGame {
     constructor (gameInitData: IGameStartupData) {
-        this.startupGame(gameInitData);
-        this.startupMainGameModules();
+        this.startup(gameInitData);
     }
 
-    startupGame (initData: IGameStartupData) {
-        this.startupModule(MainGameModule, GameStartupCommand, initData);
+    async startup (gameInitData: IGameStartupData) {
+        let initData: IGameInitData = await this.startupGame(gameInitData);
+        this.startupMainGameModules(initData);
     }
 
-    startupMainGameModules () {
+    async startupGame (initData: IGameStartupData) {
+        return await this.startupModule(MainGameModule, GameStartupCommand, initData);
+    }
+
+    startupMainGameModules (gameInitData: IGameInitData) {
 
     }
 

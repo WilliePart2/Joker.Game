@@ -7,7 +7,7 @@ import * as PIXI from 'pixi.js'
 export class GameAreaMediator extends Mediator {
     static NAME = 'GAME_AREA_MEDIATOR';
 
-    createGameRenderer (initRendererData: IInitGameAreaData) {
+    createGameRenderer (initRendererData: IInitGameAreaData): PIXI.Container {
             let game: PIXI.Application = new PIXI.Application({
                 width: initRendererData.containerWidth,
                 height: initRendererData.containerHeight,
@@ -19,6 +19,8 @@ export class GameAreaMediator extends Mediator {
             gameView.style.backgroundColor = '0x000000';
 
             initRendererData.gameContainer.appendChild(game.view);
+
+            return game.stage;
     }
 
 
@@ -32,7 +34,7 @@ export class GameAreaMediator extends Mediator {
     async handleNotification(notification: Notification<any>): Promise<any> {
         switch (notification.name) {
             case PerformMountingGame.name:
-                this.createGameRenderer(notification.body);
+                return this.createGameRenderer(notification.body);
                 break;
         }
     }
