@@ -1,7 +1,14 @@
-export interface IGameInitData {
-    containerId: string;
+export interface IGameStartupData {
+    routeForLoadingAssets: string;
+    assetsManifest: string;
+    pathToManifest: string;
+    gameContainer: HTMLElement;
     serverAddress: string;
-    communicationWrapper: any;
+}
+
+export interface IGameInitData {
+    stage: PIXI.Container;
+    communicationWrapper: any; // don't used
 }
 
 export interface IInitGameAreaData {

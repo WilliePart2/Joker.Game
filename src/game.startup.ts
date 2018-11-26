@@ -1,4 +1,4 @@
-import {IGameInitData} from "./game.core/common.interfaces/game.data";
+import {IGameStartupData} from "./game.core/common.interfaces/game.data";
 import {Facade} from "../PureMVCMulticore/core/pureMVC/facade/Facade";
 import {Command} from "../PureMVCMulticore/core/pureMVC/command/Command";
 import {Notification} from "../PureMVCMulticore/core/pureMVC/notification/Notification";
@@ -6,13 +6,12 @@ import {MainGameModule} from "./CNotifications";
 import {GameStartupCommand} from "./game/controllers/game.startup.command";
 
 export class StartupGame {
-    constructor (gameInitData: IGameInitData) {
-        let _fillInitData = {...gameInitData, containerId: 'gameContainer'};
-        this.startupGame(_fillInitData);
+    constructor (gameInitData: IGameStartupData) {
+        this.startupGame(gameInitData);
         this.startupMainGameModules();
     }
 
-    startupGame (initData: IGameInitData) {
+    startupGame (initData: IGameStartupData) {
         this.startupModule(MainGameModule, GameStartupCommand, initData);
     }
 
