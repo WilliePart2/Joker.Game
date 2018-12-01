@@ -1,0 +1,67 @@
+import {Proxy} from "../../../../PureMVCMulticore/core/pureMVC/Proxy";
+import {IResourceConfig, IResourceDeclaration, IResourceLoaderConfig} from "../resource.loader.interfaces";
+import {TPlatform} from "../../../game.core/common.constants/platforms";
+import {PixiClassesMapping} from "../../../game.core/pixi.classes.mapping";
+
+export class AssetsManager extends Proxy {
+    static NAME: string = 'AssetsManager';
+
+    private PIXI: PixiClassesMapping = null;
+    private loader: PIXI.loaders.Loader = null;
+    private resources: PIXI.loaders.ResourceDictionary = null;
+    private textureCache: PIXI.loaders.TextureDictionary = null;
+
+    private baseAssetsPath: string;
+    private platform: TPlatform;
+
+    setInitialData (initData: IResourceLoaderConfig): void {
+        this.PIXI = PixiClassesMapping.getInstance();
+        this.loader = this.PIXI.Loader;
+        this.resources = this.PIXI.Resources;
+        this.textureCache = this.PIXI.TextureCache;
+
+        this.baseAssetsPath = initData.assetsPath;
+    }
+
+    setPlatform (platform: TPlatform): void {
+        this.platform = platform;
+    }
+
+    loadResources (resourcesList: IResourceDeclaration[]): Promise<boolean> {
+        let resources: string[] = this.getResourceList(resourcesList);
+        return new Promise(resolve => {
+            PIXI.loader.add(resources)
+                .load(() => resolve());
+        });
+    }
+
+    private getResourceList (rawResourceList: IResourceDeclaration[]): string[] {
+        return rawResourceList.reduce((storage: string[], resource: IResourceDeclaration) => {
+            if (this.platformEqual(resource.platform, this.platform)) {
+                storage.push(
+                    ...resource.resourceURI.map((resource: string) => `${this.baseAssetsPath}/${resource}`)
+                );
+            }
+            return storage;
+        }, []);
+    }
+
+    private platformEqual (srcPlatform: string[], targetPlatform: string): boolean {
+        return !!srcPlatform.find((platform: string) => platform === targetPlatform);
+    }
+
+    getImage (imageName: string): PIXI.Texture | null {
+        let resource: PIXI.loaders.Resource = this.resources[imageName];
+        if (!resource) {
+            for (let resourceName in this.resources) {
+                let lastPathPart: string = resourceName.split('/').shift();
+                if (lastPathPart === imageName) {
+                    resource = this.resources[resourceName];
+                    return resource.texture;
+                }
+            }
+        }
+
+        return null;
+    }
+}

@@ -16,3 +16,13 @@ export interface IInitGameAreaData {
     containerWidth: number;
     containerHeight: number;
 }
+
+export interface IRoomInitdataPlace {
+    stage: PIXI.Container;
+    //element room
+    PlaceSprite:PIXI.Sprite;
+    countPlace:number;
+    //data
+    nameRoom:string;
+    idRoom:number;
+}

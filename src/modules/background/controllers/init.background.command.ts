@@ -1,7 +1,9 @@
 import {BaseCommand} from "../../../../PureMVCMulticore/core/pureMVC/command/BaseCommand";
 import {Notification} from "../../../../PureMVCMulticore/core/pureMVC/notification/Notification";
 import {IGameInitData} from "../../../game.core/common.interfaces/game.data";
-import * as PIXI from 'pixi.js';
+import {PixiClassesMapping} from "../../../game.core/pixi.classes.mapping";
+import {BGAssets} from "../view/assets.mapping";
+import Container = PIXI.Container;
 
 export class InitBackgroundCommand extends BaseCommand {
 
@@ -12,15 +14,10 @@ export class InitBackgroundCommand extends BaseCommand {
          * Don't do that!
          */
         let data: IGameInitData = notification.body,
-            stage: PIXI.Container = data.stage,
-            background: PIXI.Sprite = null,
-            pathToImg: string = 'assets/img/roomBackground.png';
+            _ = PixiClassesMapping.getInstance(),
+            stage: Container = data.stage,
+            background = new _.Sprite(_.TextureCache[BGAssets.RoomDB]);
 
-        PIXI.loader.add(pathToImg)
-            .load(() => {
-                background = new PIXI.Sprite(PIXI.utils.TextureCache[pathToImg])
-                stage.addChild(background);
-            });
-
+            stage.addChild(background);
     }
 }
