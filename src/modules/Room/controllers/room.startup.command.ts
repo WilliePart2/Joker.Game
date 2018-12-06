@@ -14,7 +14,7 @@ export class RoomStartupCommand extends GameModule {
 
 
     registerCommands() {
-        this.facade().registerCommand(initRoom,InitRoomCommand);
+        this.facade().registerCommand(initRoom, InitRoomCommand);
         // this.facade().registerCommand(InitRoomPlace,InitRoomPlaceCommand);
     }
 }

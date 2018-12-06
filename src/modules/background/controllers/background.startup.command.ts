@@ -20,6 +20,6 @@ export class BackgroundStartupCommand extends GameModule {
     registerMediators (initNotification: Notification<IGameInitData>): void {
         let initData: IGameInitData = initNotification.body,
             rootStage: Container = initData.stage;
-        this.facade().registerMediator(BackgroundMediator.NAME, new BackgroundMediator(rootStage));
+        this.facade().registerMediator(BackgroundMediator.NAME, new BackgroundMediator(this.facadeKey, rootStage));
     }
 }

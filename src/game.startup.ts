@@ -3,10 +3,17 @@ import {Facade} from "../PureMVCMulticore/core/pureMVC/facade/Facade";
 import {Command} from "../PureMVCMulticore/core/pureMVC/command/Command";
 import {Notification} from "../PureMVCMulticore/core/pureMVC/notification/Notification";
 import {GameStartupCommand} from "./game/controllers/game.startup.command";
-import {BackgroundModule, MainGameModule, ResourceLoaderModule, RoomModule} from "./module.names";
+import {
+    BackgroundModule,
+    Compiler,
+    MainGameModule,
+    ResourceLoaderModule,
+    RoomModule
+} from "./module.names";
 import {BackgroundStartupCommand} from "./modules/background/controllers/background.startup.command";
 import {RoomStartupCommand} from "./modules/Room/controllers/room.startup.command";
 import {ResourceManagerStartupCommand} from "./modules/resource.manager/controllers/resource.manager.startup.command";
+import {CompilerStartupCommand} from "./modules/compiler/controllers/compiler.startup.command";
 
 export class StartupGame {
     constructor (gameInitData: IGameStartupData) {
@@ -21,13 +28,14 @@ export class StartupGame {
     async startupGame (initData: IGameStartupData): Promise<IGameInitData> {
         let gameInitData: IGameInitData = await this.startupModule(MainGameModule, GameStartupCommand, initData);
         await this.startupModule(ResourceLoaderModule, ResourceManagerStartupCommand, initData);
+        await this.startupModule(Compiler, CompilerStartupCommand);
 
         return gameInitData;
     }
 
     startupMainGameModules (gameInitData: IGameInitData) {
-        this.startupModule(BackgroundModule, BackgroundStartupCommand, gameInitData)
-            .then(() => this.startupModule(RoomModule, RoomStartupCommand, gameInitData))
+        this.startupModule(BackgroundModule, BackgroundStartupCommand, gameInitData);
+        this.startupModule(RoomModule, RoomStartupCommand, gameInitData);
     }
 
     startupModule <T>(moduleNotification: Notification<any>, moduleCommandRef: Function, initialData?: T): Promise<any> {

@@ -5,3 +5,4 @@ export const MainGameModule = Notification.getInstance<IGameInitData>('INIT_GAME
 export const BackgroundModule = Notification.getInstance<IGameInitData>('BACKGROUND');
 export const RoomModule = Notification.getInstance<IGameInitData>("ROOM");
 export const ResourceLoaderModule = Notification.getInstance<IGameStartupData>('RESOURCE_LOADER');
+export const Compiler = Notification.getInstance<undefined>('COMPILER');

@@ -4,14 +4,13 @@ import { TEST } from "./ui.names";
 import { UIHandler } from "../../../game.core/game.decorators/ui.handler";
 import { TestUI } from "../background.notifications";
 import { Notification } from "../../../../PureMVCMulticore/core/pureMVC/notification/Notification";
-import { Handler } from "../../../../PureMVCMulticore/core/pureMVC/decorators/handler";
 import { TestShared } from "../../../shared.notifications/test.notifications";
 
 export class BackgroundMediator extends GameMediator {
     static NAME: string = 'BackgroundMediator';
 
     init (): void {
-        this.registerUI(TEST, BackgroundTestUI)
+        this.registerUI(TEST, BackgroundTestUI);
 
         this.createUIComponent(TEST);
     }
@@ -21,8 +20,22 @@ export class BackgroundMediator extends GameMediator {
         console.log(notification.name, notification.body);
     }
 
-    @Handler(TestShared)
     testSharedHandling (notification: Notification<string>) {
-        console.log(notification.body);
+        console.log(notification.name);
+    }
+
+    async handleNotification(notification: Notification<any>): Promise<any> {
+        let nName: string = notification.name;
+
+        switch (nName) {
+            case TestShared.name:
+                this.testSharedHandling(notification);
+        }
+    }
+
+    listNotificationInterests(): Notification<any>[] {
+        return [
+            TestShared
+        ];
     }
 }

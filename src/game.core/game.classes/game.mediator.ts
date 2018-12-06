@@ -8,34 +8,16 @@ export type HandlerDeclaration = [string, Function];
 
 export class GameMediator extends Mediator<typeof UIComponent | UIComponent> implements INotificationContext {
     _handledUINotificationList: Array<HandlerDeclaration>;
-    /**
-     * "Handler" decorator will use this props and store data inside
-     */
-    _handledNotificationList: Array<HandlerDeclaration> = [];
-    _listNotificationInterests: Array<Notification<any>> = [];
-
-    listNotificationInterests (): Notification<any>[] {
-        return this._listNotificationInterests as Notification<any>[];
-    };
-
-    async handleNotification (notification: Notification<any>): Promise<any> {
-        let notificationName: string = notification.name,
-            handler: Function = this.findItem<Function>(this._handledNotificationList, notificationName);
-
-        if (handler) {
-            handler.call(this, notification);
-        }
-    };
 
     private rootStage: Container;
 
-    constructor (rootStage: Container) {
-        super();
+    constructor (facadeKey: string, rootStage: Container) {
+        super(facadeKey);
         this.rootStage = rootStage;
     }
 
     handleUINotification (notification: Notification<any>): any {
-        let handler: Function = this.findItem<Function>(this._handledUINotificationList, notification.name)
+        let handler: Function = this.findItem<Function>(this._handledUINotificationList, notification.name);
 
         if (handler) {
             handler.call(this, notification);

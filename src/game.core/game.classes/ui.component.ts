@@ -1,11 +1,22 @@
 import Container = PIXI.Container;
 import {INotificationContext} from "../common.interfaces/game.ui";
 import {Notification} from "../../../PureMVCMulticore/core/pureMVC/notification/Notification";
+import {Facade} from "../../../PureMVCMulticore/core/pureMVC/facade/Facade";
+import {Compiler} from "../../module.names";
+import {SharedCompileElement} from "../../shared.notifications/shared.compiler.notification";
 
 export class UIComponent {
     private _notificationContext: INotificationContext;
     private _notificationMethod: Function;
+
+    /**
+     * Main element for this UI component
+     */
     protected element: Container = null;
+
+    /**
+     * Link to root Stage of all application
+     */
     protected rootStage: Container = null;
 
     set notificationContext (context: INotificationContext) {
@@ -43,6 +54,20 @@ export class UIComponent {
     }
 
     protected prepareUI (startData?: any): void {
+        this.prepareLayout();
+    }
+
+    protected prepareLayout () {
+        let layout = this._layout();
+        let styles = this._styles();
+        let compilerElt = this.getCompiler().sendNotification(SharedCompileElement);
+    }
+
+    protected _layout () {
+
+    }
+
+    protected _styles () {
 
     }
 
@@ -52,5 +77,9 @@ export class UIComponent {
 
     protected afterRender (startData?: any): void {
 
+    }
+
+    protected getCompiler (): Facade {
+        return Facade.getInstance(Compiler.name);
     }
 }
