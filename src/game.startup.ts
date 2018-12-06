@@ -27,7 +27,7 @@ export class StartupGame {
 
     startupMainGameModules (gameInitData: IGameInitData) {
         this.startupModule(BackgroundModule, BackgroundStartupCommand, gameInitData)
-            .then(() => this.startupModule(RoomModule,RoomStartupCommand,gameInitData))
+            .then(() => this.startupModule(RoomModule, RoomStartupCommand, gameInitData))
     }
 
     startupModule <T>(moduleNotification: Notification<any>, moduleCommandRef: Function, initialData?: T): Promise<any> {
