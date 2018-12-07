@@ -8,7 +8,6 @@ export type HandlerDeclaration = [string, Function];
 
 export class GameMediator extends Mediator<typeof UIComponent | UIComponent> implements INotificationContext {
     _handledUINotificationList: Array<HandlerDeclaration>;
-
     private rootStage: Container;
 
     constructor (facadeKey: string, rootStage: Container) {
@@ -32,7 +31,7 @@ export class GameMediator extends Mediator<typeof UIComponent | UIComponent> imp
 
     createUIComponent (uiName: string, initData?: any): void {
         let uiComponent: typeof UIComponent = this.retrieveClientObject(uiName) as typeof UIComponent,
-            activeComponent: UIComponent = new uiComponent(this.rootStage, this),
+            activeComponent: UIComponent = new uiComponent(this.rootStage, this.mediatorKey),
             prefixedUIName = this.getPefixedUIName(uiName);
 
         this.registerClientObject(prefixedUIName, activeComponent);

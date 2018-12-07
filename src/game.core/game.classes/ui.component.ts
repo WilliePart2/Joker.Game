@@ -4,10 +4,11 @@ import {Notification} from "../../../PureMVCMulticore/core/pureMVC/notification/
 import {Facade} from "../../../PureMVCMulticore/core/pureMVC/facade/Facade";
 import {Compiler} from "../../module.names";
 import {SharedCompileElement} from "../../shared.notifications/shared.compiler.notification";
+import { SimpleObserver } from "./simple.observer";
 
-export class UIComponent {
-    private _notificationContext: INotificationContext;
-    private _notificationMethod: Function;
+export class UIComponent extends SimpleObserver {
+    private _notificationContext: SimpleObserver;
+    // private _notificationMethod: Function;
 
     /**
      * Main element for this UI component
@@ -19,33 +20,46 @@ export class UIComponent {
      */
     protected rootStage: Container = null;
 
-    set notificationContext (context: INotificationContext) {
+    set notificationContext (context: SimpleObserver) {
       this._notificationContext = context;
     }
     get notificationContext () {
       return this._notificationContext;
     }
 
-    set notificationMethod (method: Function) {
-      this._notificationMethod = method;
-    }
-    get notificationMethod () {
-      return this._notificationMethod;
-    }
+    // set notificationMethod (method: Function) {
+    //   this._notificationMethod = method;
+    // }
+    // get notificationMethod () {
+    //   return this._notificationMethod;
+    // }
 
-    constructor (viewStage: Container, notificationContext: INotificationContext) {
+    constructor (viewStage: Container, contextKey: string) {
+        super();
         this.rootStage = viewStage;
-        this.notificationContext = notificationContext;
+        this.notificationContext = SimpleObserver.getInstance(contextKey);
 
-        if (notificationContext.handleUINotification) {
-            this.notificationMethod = notificationContext.handleUINotification;
-        }
+        // if (notificationContext.handleUINotification) {
+        //     this.notificationMethod = notificationContext.handleUINotification;
+        // }
     }
 
-    sendNotificationToMediator <T extends Notification<any>>(notification: T, notificationBody?: T[keyof T], notificationType?: string) {
-        notification.body = notificationBody;
-        this.notificationMethod.call(this.notificationContext, notification)
+    on (eventName: string, handler: Function): void {
+        this.notificationContext.on(eventName, handler);
     }
+
+    off (eventName: string, handler?: Function): void {
+        this.notificationContext.off(eventName, handler);
+    }
+
+    publish (eventName: string, eventData: any): void {
+        this.notificationContext.publish(eventName, eventData);
+    }
+
+    // sendNotificationToMediator <T extends Notification<any>>(notification: T, notificationBody?: T[keyof T], notificationType?: string) {
+    //     notification.body = notificationBody;
+    //     this.notificationMethod.call(this.notificationContext, notification)
+    // }
 
     initUIComponent (startData?: any): void {
         this.prepareUI(startData);
