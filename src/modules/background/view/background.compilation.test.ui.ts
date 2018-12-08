@@ -1,5 +1,5 @@
 import {UIComponent} from "../../../game.core/game.classes/ui.component";
-import {IElementTemplate, IGameStyle} from "../../../game.core/common.interfaces/game.ui";
+import {IElementTemplate, IGameStyle, IGameStyleSheet} from "../../../game.core/common.interfaces/game.ui";
 import {BGAssets} from "./assets.mapping";
 
 export class BackgroundCompilationTestUI extends UIComponent {
@@ -15,7 +15,8 @@ export class BackgroundCompilationTestUI extends UIComponent {
             children: [
                 {
                     id: 'backgroundChildElement_1',
-                    elementType: PIXI.Sprite
+                    elementType: PIXI.Sprite,
+                    classList: 'test_styles'
                 },
                 {
                     id: 'backgroundChildElement_2',
@@ -25,9 +26,11 @@ export class BackgroundCompilationTestUI extends UIComponent {
         }
     }
 
-    protected _styles(): IGameStyle[] {
+    protected _styles(): IGameStyleSheet[] {
         return [{
-            textureId: 'img/roomBackground.png'
+            test_styles: {
+                textureId: 'roomBackground.png'
+            }
         }]
     }
 }

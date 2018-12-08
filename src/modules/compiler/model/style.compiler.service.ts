@@ -16,6 +16,9 @@ export class StyleCompilerService extends CommonCompilerService {
     styleStore: StyleStore = null;
 
     async compile (element: IExtendedContainer, styles: IGameStyleSheet[]): Promise<PIXI.Container> {
+        if (element.children) {
+            this.compileChildren(element.children as IExtendedContainer[], styles);
+        }
         this.styleStore = StyleStore.getInstance();
         this.styleStore.saveStyles(styles);
 
@@ -28,6 +31,18 @@ export class StyleCompilerService extends CommonCompilerService {
         await this.applyStylesToElement(element, finalStyles);
 
         return element;
+    }
+
+    /**
+     * @TODO: Need to decrease count of style compilation/recompilation esspecialy in case of many child elements
+     * @param childElements
+     * @param styles
+     */
+    async compileChildren (childElements: IExtendedContainer[], styles: IGameStyleSheet[]): Promise<IExtendedContainer[]> {
+        let compiledElts = await Promise.all(
+            childElements.map((childElt: IExtendedContainer) => this.compile(childElt, styles))
+        ) as IExtendedContainer[];
+        return compiledElts;
     }
 
     async applyStylesToElement (element: PIXI.Container, styles: IGameStyle): Promise<void> {
@@ -77,14 +92,14 @@ export class StyleCompilerService extends CommonCompilerService {
      * @param finalStyles
      */
     mergeStylesWithSnapshot (elementName: PIXI.Container, finalStyles: IGameStyle): IGameStyle {
-        let styleSnapshot: IGameStyle = this.styleStore.getStyleSnapshot(elementName);
+        let styleSnapshot: IGameStyle = this.styleStore.getStyleSnapshot(elementName) || {} as IGameStyle;
         deepMerge(styleSnapshot, finalStyles);
 
         return styleSnapshot;
     }
 
     async getTextureByName (textureName: string): Promise<PIXI.Texture> {
-        let texture: PIXI.Texture = await this.getResourceManager().sendNotification(SharedGetTextureByName);
+        let texture: PIXI.Texture = await this.getResourceManager().sendNotification(SharedGetTextureByName, textureName);
         return texture
     }
 

@@ -16,9 +16,9 @@ export class AssetsManager extends Proxy {
 
     setInitialData (initData: IResourceLoaderConfig): void {
         this.PIXI = PixiClassesMapping.getInstance();
-        this.loader = this.PIXI.Loader;
-        this.resources = this.PIXI.Resources;
-        this.textureCache = this.PIXI.TextureCache;
+        this.loader = PIXI.loader;
+        this.resources = PIXI.loader.resources;
+        this.textureCache = PIXI.utils.TextureCache;
 
         this.baseAssetsPath = initData.assetsPath;
     }
@@ -55,12 +55,12 @@ export class AssetsManager extends Proxy {
      * @param imageName
      */
     getImage (imageName: string): PIXI.Texture | null {
-        let resource: PIXI.loaders.Resource = this.resources[imageName];
+        let resource: PIXI.loaders.Resource = PIXI.loader.resources[imageName];
         if (!resource) {
-            for (let resourceName in this.resources) {
-                let lastPathPart: string = resourceName.split('/').shift();
+            for (let resourceName in PIXI.loader.resources) {
+                let lastPathPart: string = resourceName.split('/').pop();
                 if (lastPathPart === imageName) {
-                    resource = this.resources[resourceName];
+                    resource = PIXI.loader.resources[resourceName];
                     return resource.texture;
                 }
             }
