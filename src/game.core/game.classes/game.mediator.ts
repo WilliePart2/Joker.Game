@@ -43,13 +43,13 @@ export class GameMediator extends Mediator<typeof UIComponent | UIComponent> imp
         this.dropClientObject(uiName);
     }
 
-    createUIComponent (uiName: string, initData?: any): void {
+    async createUIComponent (uiName: string, initData?: any): Promise<void> {
         let uiComponent: typeof UIComponent = this.retrieveClientObject(uiName) as typeof UIComponent,
             activeComponent: UIComponent = new uiComponent(this.rootStage, this.mediatorKey),
             prefixedUIName = this.getPefixedUIName(uiName);
 
         this.registerClientObject(prefixedUIName, activeComponent);
-        activeComponent.initUIComponent(initData);
+        await activeComponent.initUIComponent(initData);
     }
 
     dropUIComponent (uiName: string): void {

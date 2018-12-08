@@ -1,20 +1,27 @@
 import { GameMediator } from "../../../game.core/game.classes/game.mediator";
 import { BackgroundTestUI } from "./background.test.ui";
-import { TEST } from "./ui.names";
+import {COMPILATION_TEST, TEST} from "./ui.names";
 import { UIHandler } from "../../../game.core/game.decorators/ui.handler";
 import { TestUI } from "../background.notifications";
 import { Notification } from "../../../../PureMVCMulticore/core/pureMVC/notification/Notification";
 import { TestShared } from "../../../shared.notifications/test.notifications";
 import {UIComponent} from "../../../game.core/game.classes/ui.component";
 import {UIEvent} from "../../../game.core/game.classes/ui.event";
+import {BackgroundCompilationTestUI} from "./background.compilation.test.ui";
 
 export class BackgroundMediator extends GameMediator {
     static NAME: string = 'BackgroundMediator';
 
     onInit (): void {
         this.registerUI(TEST, BackgroundTestUI);
-        this.createUIComponent(TEST);
-        this.addUIListeners();
+        this.registerUI(COMPILATION_TEST, BackgroundCompilationTestUI);
+
+        this.createUIComponent(COMPILATION_TEST);
+
+        this.createUIComponent(TEST)
+            .then(() => {
+                this.addUIListeners();
+            });
     }
 
     addUIListeners () {

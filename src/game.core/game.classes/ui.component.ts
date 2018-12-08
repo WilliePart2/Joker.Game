@@ -1,5 +1,10 @@
 import Container = PIXI.Container;
-import {INotificationContext} from "../common.interfaces/game.ui";
+import {
+    IDeclarationForCompiler,
+    IElementTemplate,
+    IGameStyle,
+    INotificationContext
+} from "../common.interfaces/game.ui";
 import {Notification} from "../../../PureMVCMulticore/core/pureMVC/notification/Notification";
 import {Facade} from "../../../PureMVCMulticore/core/pureMVC/facade/Facade";
 import {Compiler} from "../../module.names";
@@ -62,44 +67,51 @@ export class UIComponent {
     //     this.notificationMethod.call(this.notificationContext, notification)
     // }
 
-    initUIComponent (startData?: any): void {
-        this.prepareUI(startData);
-        this.render(startData);
+    /**
+     * With asynchronous rendering we could fetch textures and only then render UI
+     * @param startData
+     */
+    async initUIComponent (startData?: any): Promise<void> {
+        let compiledElt: Container = await this.prepareUI(startData);
+        this.render(compiledElt, startData);
         this.onInit(startData);
     }
 
-    protected prepareUI (startData?: any): void {
-        this.prepareLayout();
+    protected prepareUI (startData?: any): Promise<Container> {
+        return this.prepareLayout();
     }
 
-    protected prepareLayout () {
-        let layout = this._layout();
-        let styles = this._styles();
-        let compilerElt = this.getCompiler().sendNotification(SharedCompileElement);
+    protected async prepareLayout (): Promise<Container> {
+        return await this.getCompiler().sendNotification(SharedCompileElement, {
+            layout: this._layout(),
+            styles: this._styles()
+        });
     }
 
     /**
      * This method should return out layout
      * @private
      */
-    protected _layout () {
-
+    protected _layout (): IElementTemplate {
+        return {} as any;
     }
 
     /**
      * This method should return out styles
      * @private
      */
-    protected _styles () {
-
+    protected _styles (): IGameStyle[] {
+        return [] as any;
     }
 
     /**
      * Method perform adding ui component to stage
      * @param startData
+     * @param element
      */
-    protected render (startData?: any): void {
-
+    protected render (element: Container, startData?: any): void {
+        this.element = element;
+        this.rootStage.addChild(element);
     }
 
     /**
