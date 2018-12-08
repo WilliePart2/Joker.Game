@@ -2,7 +2,7 @@ import Container = PIXI.Container;
 import {
     IDeclarationForCompiler,
     IElementTemplate,
-    IGameStyle,
+    IGameStyle, IGameStyleSheet,
     INotificationContext
 } from "../common.interfaces/game.ui";
 import {Notification} from "../../../PureMVCMulticore/core/pureMVC/notification/Notification";
@@ -82,10 +82,12 @@ export class UIComponent {
     }
 
     protected async prepareLayout (): Promise<Container> {
-        return await this.getCompiler().sendNotification(SharedCompileElement, {
+        let compiledElt = await this.getCompiler().sendNotification(SharedCompileElement, {
             layout: this._layout(),
             styles: this._styles()
         });
+
+        return compiledElt;
     }
 
     /**
@@ -100,7 +102,7 @@ export class UIComponent {
      * This method should return out styles
      * @private
      */
-    protected _styles (): IGameStyle[] {
+    protected _styles (): IGameStyleSheet[] {
         return [] as any;
     }
 

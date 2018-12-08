@@ -7,19 +7,29 @@ export interface IElementTemplate {
     elementType: typeof PIXI.Container;
     children?: IElementTemplate[];
     styles?: IGameStyle[],
+    classList?: string
     textureId?: string
 }
 
+export interface IExtendedContainer extends PIXI.Container {
+    classList: string;
+}
+
 export interface IGameStyle {
+    textureId: string;
     [key: string]: any; // ultratype !!!
+}
+
+export interface IGameStyleSheet {
+    [selector: string]: IGameStyle;
 }
 
 export interface IDeclarationForCompiler {
     layout: IElementTemplate;
-    styles: IGameStyle[];
+    styles: IGameStyleSheet[];
 }
 
 export interface IDeclarationForStyleCompiler {
-    element: PIXI.Container;
-    styles: IGameStyle[]
+    element: IExtendedContainer;
+    styles: IGameStyleSheet[]
 }

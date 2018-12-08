@@ -5,6 +5,7 @@ import {CompileStyleCommand} from "./compile.style.command";
 import {SharedCompileElement} from "../../../shared.notifications/shared.compiler.notification";
 import {CompileElementCommand} from "./compile.element.command";
 import {LayoutCompilerService} from "../model/layout.compiler.service";
+import {StyleCompilerService} from "../model/style.compiler.service";
 
 export class CompilerStartupCommand extends GameModule {
     async execute(notification: any): Promise<any> {
@@ -23,5 +24,6 @@ export class CompilerStartupCommand extends GameModule {
 
     registerProxies(arg: any) {
         this.facade().registerProxy(LayoutCompilerService.NAME, LayoutCompilerService);
+        this.facade().registerProxy(StyleCompilerService.NAME, StyleCompilerService);
     }
 }

@@ -50,6 +50,10 @@ export class AssetsManager extends Proxy {
         return !!srcPlatform.find((platform: string) => platform === targetPlatform);
     }
 
+    /**
+     * Method can perform search by simple name as "someTexture" as by path as "path/someTexture"
+     * @param imageName
+     */
     getImage (imageName: string): PIXI.Texture | null {
         let resource: PIXI.loaders.Resource = this.resources[imageName];
         if (!resource) {

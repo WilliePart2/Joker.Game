@@ -8,10 +8,13 @@ import {LoadAssetsCommand} from "./load.assets.command";
 import {TPlatform} from "../../../game.core/common.constants/platforms";
 import {ShareResourceLoadProgressCommand} from "./share.resource.load.progress.command";
 import {Notification} from "../../../../PureMVCMulticore/core/pureMVC/notification/Notification";
+import {SharedGetTextureByName} from "../../../shared.notifications/shared.resource.manager.notifications";
+import {GetAssetByNameCommand} from "./get.asset.by.name.command";
 
 export class ResourceManagerStartupCommand extends GameModule {
     async execute(notification: Notification<IGameStartupData>): Promise<any> {
         this.registerCommands();
+        this.registerSharedCommands();
 
         let startupData: IGameStartupData = notification.body,
             loadManifestData: ILoadManifestData = {
@@ -31,6 +34,10 @@ export class ResourceManagerStartupCommand extends GameModule {
         this.facade().registerCommand(LoadManifest, LoadAssetsManifestCommand);
         this.facade().registerCommand(LoadAssets, LoadAssetsCommand);
         this.facade().registerCommand(ShareResourceLoadProgress, ShareResourceLoadProgressCommand);
+    }
+
+    registerSharedCommands () {
+        this.facade().registerCommand(SharedGetTextureByName, GetAssetByNameCommand);
     }
 
     registerProxies(manifest: IResourceConfig) {
