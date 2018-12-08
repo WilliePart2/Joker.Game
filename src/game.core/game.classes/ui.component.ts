@@ -6,7 +6,7 @@ import {Compiler} from "../../module.names";
 import {SharedCompileElement} from "../../shared.notifications/shared.compiler.notification";
 import { SimpleObserver } from "./simple.observer";
 
-export class UIComponent extends SimpleObserver {
+export class UIComponent {
     private _notificationContext: SimpleObserver;
     // private _notificationMethod: Function;
 
@@ -19,6 +19,7 @@ export class UIComponent extends SimpleObserver {
      * Link to root Stage of all application
      */
     protected rootStage: Container = null;
+    protected eventContextKey: string;
 
     set notificationContext (context: SimpleObserver) {
       this._notificationContext = context;
@@ -35,8 +36,8 @@ export class UIComponent extends SimpleObserver {
     // }
 
     constructor (viewStage: Container, contextKey: string) {
-        super();
         this.rootStage = viewStage;
+        this.eventContextKey = contextKey;
         this.notificationContext = SimpleObserver.getInstance(contextKey);
 
         // if (notificationContext.handleUINotification) {
@@ -64,7 +65,7 @@ export class UIComponent extends SimpleObserver {
     initUIComponent (startData?: any): void {
         this.prepareUI(startData);
         this.render(startData);
-        this.afterRender(startData);
+        this.onInit(startData);
     }
 
     protected prepareUI (startData?: any): void {
@@ -77,21 +78,42 @@ export class UIComponent extends SimpleObserver {
         let compilerElt = this.getCompiler().sendNotification(SharedCompileElement);
     }
 
+    /**
+     * This method should return out layout
+     * @private
+     */
     protected _layout () {
 
     }
 
+    /**
+     * This method should return out styles
+     * @private
+     */
     protected _styles () {
 
     }
 
+    /**
+     * Method perform adding ui component to stage
+     * @param startData
+     */
     protected render (startData?: any): void {
 
     }
 
-    protected afterRender (startData?: any): void {
+    /**
+     * Fired after component initialization. When component already exists in stage
+     * @param startData
+     */
+    protected onInit (startData?: any): void {
 
     }
+
+    /**
+     * Method fired before destroying mediator
+     */
+    onDestroy (): void {}
 
     protected getCompiler (): Facade {
         return Facade.getInstance(Compiler.name);

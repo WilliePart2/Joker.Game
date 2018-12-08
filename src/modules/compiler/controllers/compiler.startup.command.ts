@@ -7,8 +7,8 @@ import {CompileElementCommand} from "./compile.element.command";
 
 export class CompilerStartupCommand extends GameModule {
     async execute(notification: any): Promise<any> {
-        super.execute(notification);
-        this.registerSharedCommands();
+        super.execute(notification)
+            .then(() => this.registerSharedCommands())
     }
 
     registerCommands() {

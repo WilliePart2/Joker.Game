@@ -5,20 +5,30 @@ import { UIHandler } from "../../../game.core/game.decorators/ui.handler";
 import { TestUI } from "../background.notifications";
 import { Notification } from "../../../../PureMVCMulticore/core/pureMVC/notification/Notification";
 import { TestShared } from "../../../shared.notifications/test.notifications";
+import {UIComponent} from "../../../game.core/game.classes/ui.component";
+import {UIEvent} from "../../../game.core/game.classes/ui.event";
 
 export class BackgroundMediator extends GameMediator {
     static NAME: string = 'BackgroundMediator';
 
-    init (): void {
+    onInit (): void {
         this.registerUI(TEST, BackgroundTestUI);
-
         this.createUIComponent(TEST);
+        this.addUIListeners();
     }
 
-    @UIHandler(TestUI)
-    testUIPolling (notification: Notification<any>) {
-        console.log(notification.name, notification.body);
+    addUIListeners () {
+        let testUI: UIComponent = this.getUI(TEST);
+        testUI.on('test', () => console.log('Test UI created'));
+        this.uiEventsContext().on('test', (event: UIEvent<string>) => {
+            console.log(`Mediator handler: ${event.getData()}`);
+        });
     }
+
+    // @UIHandler(TestUI)
+    // testUIPolling (notification: Notification<any>) {
+    //     console.log(notification.name, notification.body);
+    // }
 
     testSharedHandling (notification: Notification<string>) {
         console.log(notification.name);
