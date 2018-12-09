@@ -14,7 +14,7 @@ export class BackgroundStartupCommand extends GameModule {
     }
 
     registerCommands (): void {
-        this.facade().registerCommand(InitBackground, InitBackgroundCommand);
+        // this.facade().registerCommand(InitBackground, InitBackgroundCommand);
     }
 
     registerMediators (initNotification: Notification<IGameInitData>): void {

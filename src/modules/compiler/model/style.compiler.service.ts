@@ -1,6 +1,5 @@
 import {CommonCompilerService} from "./common.compiler.service";
 import {
-    IElementTemplate,
     IExtendedContainer,
     IGameStyle,
     IGameStyleSheet
@@ -15,9 +14,16 @@ export class StyleCompilerService extends CommonCompilerService {
     static NAME = 'StyleCompilerService';
     styleStore: StyleStore = null;
 
+    /**
+     * Main entry point for compilation styles
+     * Invoke in first time when we create element
+     * And invoke each time when we add class or remove class from element
+     * @param element 
+     * @param styles 
+     */
     async compile (element: IExtendedContainer, styles: IGameStyleSheet[]): Promise<PIXI.Container> {
-        if (element.children) {
-            this.compileChildren(element.children as IExtendedContainer[], styles);
+        if (Array.isArray(element.children) && element.children.length) {
+            await this.compileChildren(element.children as IExtendedContainer[], styles);
         }
         this.styleStore = StyleStore.getInstance();
         this.styleStore.saveStyles(styles);
@@ -42,6 +48,7 @@ export class StyleCompilerService extends CommonCompilerService {
         let compiledElts = await Promise.all(
             childElements.map((childElt: IExtendedContainer) => this.compile(childElt, styles))
         ) as IExtendedContainer[];
+
         return compiledElts;
     }
 
@@ -50,13 +57,20 @@ export class StyleCompilerService extends CommonCompilerService {
         deepMerge(element, styles);
     }
 
-    private handleSpecificProperties (element: PIXI.Container, style: IGameStyle): Promise<void> {
-        return new Promise (resolve => {
-            this.isSet(style.textureId, async () => {
-                (element as PIXI.Sprite).texture = await this.getTextureByName(style.textureId);
-                resolve();
-            })
-        })
+    /**
+     * Handle properties which need special workaround
+     */
+    private handleSpecificProperties (element: PIXI.Container, style: IGameStyle): Promise<void[]> {
+        return Promise.all([
+            this.setTexture(element, style)
+        ]);
+    }
+
+    private async setTexture (element: PIXI.Container, style: IGameStyle): Promise<void> {
+        if (style.textureId) {
+            let texture = await this.getTextureById(style.textureId);
+            (element as PIXI.Sprite).texture = texture;
+        }
     }
 
     parseClassList (classList: string): string[] {
@@ -66,6 +80,10 @@ export class StyleCompilerService extends CommonCompilerService {
         return classList.split(' ');
     }
 
+    /**
+     * Create final style object from array of styles
+     * More lastest objects revrite previous object
+     */
     getFinalStyleObject (styles: IGameStyle[]): IGameStyle {
         let finalStyles: IGameStyle = {} as IGameStyle;
         styles.forEach((style: IGameStyle) => {
@@ -76,18 +94,17 @@ export class StyleCompilerService extends CommonCompilerService {
     }
 
     /**
-     * Save style snapshot only for first element compilation
+     * Save style snapshot only for each element compilation
      * @param element
      * @param propertiesToSave
      */
     saveStyleSnapshot (element: PIXI.Container, propertiesToSave: IGameStyle): void {
-        if (!this.styleStore.isSnapshotExists(element)) {
-            this.styleStore.makeStyleSnapshot(element, propertiesToSave);
-        }
+        this.styleStore.makeStyleSnapshot(element, propertiesToSave);
     }
 
     /**
      * Get old values for styles if we don't specify new
+     * When we remove class we remove values determined by the class and add old values for properties
      * @param elementName
      * @param finalStyles
      */
@@ -98,7 +115,7 @@ export class StyleCompilerService extends CommonCompilerService {
         return styleSnapshot;
     }
 
-    async getTextureByName (textureName: string): Promise<PIXI.Texture> {
+    async getTextureById (textureName: string): Promise<PIXI.Texture> {
         let texture: PIXI.Texture = await this.getResourceManager().sendNotification(SharedGetTextureByName, textureName);
         return texture
     }

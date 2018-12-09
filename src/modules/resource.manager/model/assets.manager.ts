@@ -31,7 +31,7 @@ export class AssetsManager extends Proxy {
         let resources: string[] = this.getResourceList(resourcesList);
         return new Promise(resolve => {
             PIXI.loader.add(resources)
-                .load(() => resolve());
+                .load(() => resolve(true));
         });
     }
 

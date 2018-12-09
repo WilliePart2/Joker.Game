@@ -8,6 +8,6 @@ export class LoadAssetsCommand extends BaseCommand {
         let resourceMap: IResourceConfig = notification.body,
             assetsManager: AssetsManager = this.facade().retrieveProxy(AssetsManager.NAME) as AssetsManager;
 
-        assetsManager.loadResources(resourceMap.resources);
+        await assetsManager.loadResources(resourceMap.resources);
     }
 }
