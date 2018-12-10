@@ -8,12 +8,14 @@ import {
     Compiler,
     MainGameModule,
     ResourceLoaderModule,
-    RoomModule
+    RoomModule,
+    UIManager
 } from "./module.names";
 import {BackgroundStartupCommand} from "./modules/background/controllers/background.startup.command";
 import {RoomStartupCommand} from "./modules/Room/controllers/room.startup.command";
 import {ResourceManagerStartupCommand} from "./modules/resource.manager/controllers/resource.manager.startup.command";
 import {CompilerStartupCommand} from "./modules/compiler/controllers/compiler.startup.command";
+import { UIManagerStartupCommand } from "./modules/ui.manager/controllers/ui.manager.startup.command";
 
 export class StartupGame {
     constructor (gameInitData: IGameStartupData) {
@@ -29,6 +31,7 @@ export class StartupGame {
         let gameInitData: IGameInitData = await this.startupModule(MainGameModule, GameStartupCommand, initData);
         await this.startupModule(ResourceLoaderModule, ResourceManagerStartupCommand, initData);
         await this.startupModule(Compiler, CompilerStartupCommand);
+        await this.startupModule(UIManager, UIManagerStartupCommand, gameInitData);
 
         return gameInitData;
     }

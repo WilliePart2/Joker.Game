@@ -6,3 +6,4 @@ export const BackgroundModule = Notification.getInstance<IGameInitData>('BACKGRO
 export const RoomModule = Notification.getInstance<IGameInitData>("ROOM");
 export const ResourceLoaderModule = Notification.getInstance<IGameStartupData>('RESOURCE_LOADER');
 export const Compiler = Notification.getInstance<undefined>('COMPILER');
+export const UIManager = Notification.getInstance<IGameStartupData>('UI_MANAGER');

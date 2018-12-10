@@ -12,11 +12,12 @@ export interface IElementTemplate {
 }
 
 export interface IExtendedContainer extends PIXI.Container {
-    classList: string;
+    classList?: string;
 }
 
 export interface IGameStyle {
-    textureId: string;
+    textureId?: string;
+    scale?: {x: number, y: number};
     [key: string]: any; // ultratype !!!
 }
 
@@ -33,3 +34,11 @@ export interface IDeclarationForStyleCompiler {
     element: IExtendedContainer;
     styles: IGameStyleSheet[]
 }
+
+/** Interfaces for UIManager */
+export interface IUIManagerStatement<T> {
+    element: IExtendedContainer;
+    payload: T;
+}
+export interface IUIAddClassStatement extends IUIManagerStatement<{className: string, styles: IGameStyleSheet[]}> {}
+export interface IUIRemoveClassStatement extends IUIManagerStatement<{className: string, styles: IGameStyleSheet[]}> {}

@@ -3,13 +3,15 @@ import {
     IDeclarationForCompiler,
     IElementTemplate,
     IGameStyle, IGameStyleSheet,
-    INotificationContext
+    INotificationContext,
+    IExtendedContainer
 } from "../common.interfaces/game.ui";
 import {Notification} from "../../../PureMVCMulticore/core/pureMVC/notification/Notification";
 import {Facade} from "../../../PureMVCMulticore/core/pureMVC/facade/Facade";
-import {Compiler} from "../../module.names";
+import {Compiler, UIManager} from "../../module.names";
 import {SharedCompileElement} from "../../shared.notifications/shared.compiler.notification";
 import { SimpleObserver } from "./simple.observer";
+import { SharedAddClassToElement, SharedRemoveClassFromElement } from "../../shared.notifications/shared.ui.manager.notifications";
 
 export class UIComponent {
     private _notificationContext: SimpleObserver;
@@ -62,10 +64,40 @@ export class UIComponent {
         this.notificationContext.publish(eventName, eventData);
     }
 
-    // sendNotificationToMediator <T extends Notification<any>>(notification: T, notificationBody?: T[keyof T], notificationType?: string) {
-    //     notification.body = notificationBody;
-    //     this.notificationMethod.call(this.notificationContext, notification)
-    // }
+    async addClass(element: IExtendedContainer, className: string): Promise<void> {
+        await this.getUIManager().sendNotification(SharedAddClassToElement, {
+            element: element,
+            payload: {
+                className: className,
+                styles: this._styles()
+            }
+        });
+    }
+
+    async removeClass (element: IExtendedContainer, className: string): Promise<void> {
+        await this.getUIManager().sendNotification(SharedRemoveClassFromElement, {
+            element: element,
+            payload: {
+                className: className,
+                styles: this._styles()
+            }
+        });
+    }
+
+    getElement <T extends PIXI.Container>(elementId: string): T | null {
+        let element = this.element;
+        let neededElement: PIXI.Container = null;
+        do {
+            let _elt = element.getChildByName(elementId);
+            if (_elt) {
+                neededElement = _elt as PIXI.Container;
+                break;
+            }
+            element = element.parent;
+        } while (element.parent);
+
+        return neededElement as T;
+    }
 
     /**
      * With asynchronous rendering we could fetch textures and only then render UI
@@ -81,6 +113,8 @@ export class UIComponent {
         return this.prepareLayout();
     }
 
+    // @TODO: Think about does it normal that ui know about facade?
+    // @TODO: Can we move this logic into mediator and subscribe for specific ui event?
     protected async prepareLayout (): Promise<Container> {
         let compiledElt = await this.getCompiler().sendNotification(SharedCompileElement, {
             layout: this._layout(),
@@ -113,7 +147,7 @@ export class UIComponent {
      */
     protected render (element: Container, startData?: any): void {
         this.element = element;
-        this.rootStage.addChild(element);
+        this.rootStage.addChild(this.element);
     }
 
     /**
@@ -131,5 +165,9 @@ export class UIComponent {
 
     protected getCompiler (): Facade {
         return Facade.getInstance(Compiler.name);
+    }
+
+    protected getUIManager (): Facade {
+        return Facade.getInstance(UIManager.name);
     }
 }

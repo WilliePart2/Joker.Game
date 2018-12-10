@@ -1,5 +1,6 @@
 import {IGameStyle, IGameStyleSheet} from "../../../game.core/common.interfaces/game.ui";
 import {deepMerge} from "../../../game.core/utils/deepMerge";
+import { getValue } from "../../../game.core/utils/get.value";
 
 /**
  * Singleton
@@ -43,7 +44,9 @@ export class StyleStore {
         let oldSnapshot: IGameStyle = this.oldStylesStore[element.name] || {} as IGameStyle;
         let snapshot: IGameStyle = {} as IGameStyle;
         Object.keys(style)
-            .forEach((key: string) => snapshot[key] = (element as any)[key]);
+            .forEach(
+                    (key: string) => snapshot[key] = getValue((element as any)[key])
+                );
         
         // create new object
         snapshot = {...snapshot};
