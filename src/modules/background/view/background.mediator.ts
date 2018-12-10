@@ -8,6 +8,8 @@ import { TestShared } from "../../../shared.notifications/test.notifications";
 import {UIComponent} from "../../../game.core/game.classes/ui.component";
 import {UIEvent} from "../../../game.core/game.classes/ui.event";
 import {BackgroundCompilationTestUI} from "./background.compilation.test.ui";
+import {SharedOnGameResize} from "../../../shared.notifications/shared.environment.notification";
+import {IGameSize} from "../../../game.core/common.interfaces/game.environment";
 
 export class BackgroundMediator extends GameMediator {
     static NAME: string = 'BackgroundMediator';
@@ -32,11 +34,6 @@ export class BackgroundMediator extends GameMediator {
         });
     }
 
-    // @UIHandler(TestUI)
-    // testUIPolling (notification: Notification<any>) {
-    //     console.log(notification.name, notification.body);
-    // }
-
     testSharedHandling (notification: Notification<string>) {
         console.log(notification.name);
     }
@@ -47,12 +44,21 @@ export class BackgroundMediator extends GameMediator {
         switch (nName) {
             case TestShared.name:
                 this.testSharedHandling(notification);
+                break;
+            case SharedOnGameResize.name:
+                this.onResize(notification.body);
+                break;
         }
+    }
+
+    onResize (gameSize: IGameSize): void {
+        console.log(gameSize);
     }
 
     listNotificationInterests(): Notification<any>[] {
         return [
-            TestShared
+            TestShared,
+            SharedOnGameResize
         ];
     }
 }

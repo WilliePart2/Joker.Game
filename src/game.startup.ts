@@ -5,7 +5,7 @@ import {Notification} from "../PureMVCMulticore/core/pureMVC/notification/Notifi
 import {GameStartupCommand} from "./game/controllers/game.startup.command";
 import {
     BackgroundModule,
-    Compiler,
+    Compiler, Environment,
     MainGameModule,
     ResourceLoaderModule,
     RoomModule,
@@ -16,6 +16,7 @@ import {RoomStartupCommand} from "./modules/Room/controllers/room.startup.comman
 import {ResourceManagerStartupCommand} from "./modules/resource.manager/controllers/resource.manager.startup.command";
 import {CompilerStartupCommand} from "./modules/compiler/controllers/compiler.startup.command";
 import { UIManagerStartupCommand } from "./modules/ui.manager/controllers/ui.manager.startup.command";
+import {EnvironmentSturtupCommand} from "./modules/environment/controllers/environment.sturtup.command";
 
 export class StartupGame {
     constructor (gameInitData: IGameStartupData) {
@@ -31,7 +32,8 @@ export class StartupGame {
         let gameInitData: IGameInitData = await this.startupModule(MainGameModule, GameStartupCommand, initData);
         await this.startupModule(ResourceLoaderModule, ResourceManagerStartupCommand, initData);
         await this.startupModule(Compiler, CompilerStartupCommand);
-        await this.startupModule(UIManager, UIManagerStartupCommand, gameInitData);
+        await this.startupModule(UIManager, UIManagerStartupCommand, initData);
+        await this.startupModule(Environment, EnvironmentSturtupCommand, initData);
 
         return gameInitData;
     }
@@ -41,10 +43,10 @@ export class StartupGame {
         this.startupModule(RoomModule, RoomStartupCommand, gameInitData);
     }
 
-    startupModule <T>(moduleNotification: Notification<any>, moduleCommandRef: Function, initialData?: T): Promise<any> {
+    startupModule <T extends Notification<any>>(moduleNotification: T, moduleCommandRef: Function, initialData?: T[keyof T]): Promise<any> {
         let module: Facade = Facade.getInstance(moduleNotification.name),
             startupCommandNotification: Notification<T> = Notification.getInstance<T>(`module_startup_${moduleNotification.name}`);
         module.registerCommand(startupCommandNotification, moduleCommandRef as typeof Command);
-        return module.sendNotification(startupCommandNotification, initialData);
+        return module.sendNotification(startupCommandNotification, initialData as any);
     }
 }
