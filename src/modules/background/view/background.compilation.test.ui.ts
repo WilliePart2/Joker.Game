@@ -59,10 +59,6 @@ export class BackgroundCompilationTestUI extends UIComponent {
     onResize (gameSize: IGameSize) {
         let bg: PIXI.Sprite = this.getElement('backgroundChildElement_1') as PIXI.Sprite;
         ui(bg)
-            .size('50%');
-        // let bgImageElt = this.getElement('backgroundChildElement_1');
-        // bgImageElt.scale.set(0.5, 0.5);
-        // ui(bgImageElt)
-        //     .size('50%');
+            .size('100%', true);
     }
 }

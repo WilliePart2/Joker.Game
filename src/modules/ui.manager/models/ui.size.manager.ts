@@ -47,9 +47,7 @@ export class UiSizeManager {
         let gameStage: HTMLElement = this._getGameStage();
         let gameWidth: number = gameStage.clientWidth,
             gameHeight: number = gameStage.clientHeight,
-            // eltWidth: number = elt.width / elt.scale.x,
             eltWidth: number = this._getAbsWidth(elt),
-            // eltHeight: number = elt.height / elt.scale.y,
             eltHeight: number = this._getAbsHeight(elt),
             targetWidthInPercent: number,
             targetHeightInPercent: number;
@@ -67,9 +65,6 @@ export class UiSizeManager {
 
             let finalScale = applyMaxSize ? Math.max(targetScaleX, targetScaleY) : Math.min(targetScaleX, targetScaleY);
 
-            // elt.scale.set(finalScale, finalScale);
-            // elt.width = eltWidth * finalScale;
-            // elt.height = eltHeight * finalScale;
             this._setElementScale(elt, new PIXI.Point(finalScale, finalScale));
             return;
         }
@@ -84,18 +79,26 @@ export class UiSizeManager {
         targetWidthInPercent = parseInt((<IEltDimensions<string>>size).width, 10);
         targetHeightInPercent = parseInt((<IEltDimensions<string>>size).height, 10);
 
+        /**
+         * Apply scale for x axis
+         */
         if (!isNaN(targetWidthInPercent)) {
             let absoluteTargetWidth: number = gameWidth * (targetWidthInPercent / 100),
-                targetScaleX: PIXI.Point = new PIXI.Point(eltWidth / absoluteTargetWidth);
+                targetScaleX: PIXI.Point = new PIXI.Point(absoluteTargetWidth / eltWidth, elt.scale.y);
 
-            elt.scale = targetScaleX;
+            // elt.scale = targetScaleX;
+            this._setElementScale(elt, targetScaleX);
         }
 
+        /**
+         * Apply scale for y axis
+         */
         if (!isNaN(targetHeightInPercent)) {
             let absoluteTargetHeight: number = gameHeight * (targetHeightInPercent / 100),
-                targetScaleY: PIXI.Point = new PIXI.Point(elt.scale.x,eltHeight / absoluteTargetHeight);
+                targetScaleY: PIXI.Point = new PIXI.Point(elt.scale.x,absoluteTargetHeight / eltHeight);
 
-            elt.scale = targetScaleY;
+            // elt.scale = targetScaleY;
+            this._setElementScale(elt, targetScaleY);
         }
     }
 
