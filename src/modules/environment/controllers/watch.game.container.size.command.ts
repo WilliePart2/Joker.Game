@@ -13,8 +13,6 @@ export class WatchGameContainerSizeCommand extends BaseCommand {
             mainWrapper: Window = window,
             environmentService: EnvironmentService = this.facade().retrieveProxy(EnvironmentService.NAME) as EnvironmentService;
 
-        environmentService.listenResizeEvent(mainWrapper, container, (gameSize: IGameSize) => {
-            this.sendNotificationToAll(SharedOnGameResize, gameSize);
-        });
+        environmentService.listenResizeEvent(mainWrapper, container);
     }
 }

@@ -12,6 +12,7 @@ import {Compiler, UIManager} from "../../module.names";
 import {SharedCompileElement} from "../../shared.notifications/shared.compiler.notification";
 import { SimpleObserver } from "./simple.observer";
 import { SharedAddClassToElement, SharedRemoveClassFromElement } from "../../shared.notifications/shared.ui.manager.notifications";
+import { IGameSize } from "../common.interfaces/game.environment";
 
 export class UIComponent {
     private _notificationContext: SimpleObserver;
@@ -86,17 +87,42 @@ export class UIComponent {
 
     getElement <T extends PIXI.Container>(elementId: string): T | null {
         let element = this.element;
-        let neededElement: PIXI.Container = null;
-        do {
-            let _elt = element.getChildByName(elementId);
-            if (_elt) {
-                neededElement = _elt as PIXI.Container;
-                break;
-            }
-            element = element.parent;
-        } while (element.parent);
+        let neededElement: PIXI.Container = this._tryToFindChildLower(elementId);
+
+        if (!neededElement) {
+            do {
+                let _elt = element.getChildByName(elementId);
+                if (_elt) {
+                    neededElement = _elt as PIXI.Container;
+                    break;
+                }
+                element = element.parent;
+            } while (element.parent);
+        }
 
         return neededElement as T;
+    }
+
+    private _tryToFindChildLower (elementId: string, elt?: PIXI.Container): PIXI.Container | null {
+        let element = elt || this.element,
+            neededElement: PIXI.Container;
+
+        neededElement = element.getChildByName(elementId) as PIXI.Container;
+
+        if (neededElement) {
+            return neededElement;
+        }
+
+        if (element.children && element.children.length) {
+            for (let i = 0; i < element.children.length; i++) {
+                neededElement = this._tryToFindChildLower(elementId, element.children[i] as PIXI.Container);
+                if (neededElement) {
+                    return neededElement;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -169,5 +195,9 @@ export class UIComponent {
 
     protected getUIManager (): Facade {
         return Facade.getInstance(UIManager.name);
+    }
+
+    onResize (gameSize: IGameSize) {
+
     }
 }

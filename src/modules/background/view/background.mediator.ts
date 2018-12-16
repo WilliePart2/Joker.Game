@@ -52,7 +52,8 @@ export class BackgroundMediator extends GameMediator {
     }
 
     onResize (gameSize: IGameSize): void {
-        console.log(gameSize);
+        let bgUI = this.getUI(COMPILATION_TEST);
+        bgUI.onResize(gameSize);
     }
 
     listNotificationInterests(): Notification<any>[] {

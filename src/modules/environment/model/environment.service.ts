@@ -1,6 +1,7 @@
 import {Proxy} from "../../../../PureMVCMulticore/core/pureMVC/Proxy";
 import {IGameDimenssions} from "../environment.interfaces";
 import {IGameSize} from "../../../game.core/common.interfaces/game.environment";
+import { SharedOnGameResize } from '../../../shared.notifications/shared.environment.notification';
 
 export class EnvironmentService extends Proxy {
     static NAME: string = 'EnvironmentService';
@@ -13,7 +14,7 @@ export class EnvironmentService extends Proxy {
         };
     }
 
-    listenResizeEvent (container: Window, gameContainer: HTMLElement, notificationEvent: (gameSize: IGameSize) => void): void {
+    listenResizeEvent (container: Window, gameContainer: HTMLElement): void {
         this.resizeHandler = () => {
             clearTimeout(this.resizeHandlerTimer);
 
@@ -23,9 +24,10 @@ export class EnvironmentService extends Proxy {
                     gameWidth: width,
                     gameHeight: height
                 };
-                notificationEvent(gameSize);
+                this.sendNotificationToAll(SharedOnGameResize, gameSize);
             }, 100);
         };
+
         container.addEventListener('resize', this.resizeHandler as EventListener, false);
     }
 
