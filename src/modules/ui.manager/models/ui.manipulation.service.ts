@@ -1,8 +1,7 @@
 /**
- * Service for manipulation with ui position size etc.
+ * Service for manipulation with ui position, size etc.
  * It expose high level interface and work with underling game modules such as compiler and ui manager.
  * Singleton. Store only global game objects and configurations
- * Base class
  */
 import { UiSizeManager } from "./ui.size.manager";
 import { IEltDimensions, IUIManager } from "../ui.manager.interfaces";

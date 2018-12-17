@@ -103,6 +103,12 @@ export class UIComponent {
         return neededElement as T;
     }
 
+    /**
+     * @TODO: move to ui manipulation service. and use here only method invocation
+     * @param elementId
+     * @param elt
+     * @private
+     */
     private _tryToFindChildLower (elementId: string, elt?: PIXI.Container): PIXI.Container | null {
         let element = elt || this.element,
             neededElement: PIXI.Container;

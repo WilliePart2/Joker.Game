@@ -5,10 +5,10 @@ import {Notification} from "../PureMVCMulticore/core/pureMVC/notification/Notifi
 import {GameStartupCommand} from "./game/controllers/game.startup.command";
 import {
     BackgroundModule,
-    Compiler, Environment,
+    Compiler, Environment, GameFlowModule,
     MainGameModule,
     ResourceLoaderModule,
-    RoomModule,
+    RoomModule, ServerCommunicationModule,
     UIManager
 } from "./module.names";
 import {BackgroundStartupCommand} from "./modules/background/controllers/background.startup.command";
@@ -17,6 +17,8 @@ import {ResourceManagerStartupCommand} from "./modules/resource.manager/controll
 import {CompilerStartupCommand} from "./modules/compiler/controllers/compiler.startup.command";
 import { UIManagerStartupCommand } from "./modules/ui.manager/controllers/ui.manager.startup.command";
 import {EnvironmentSturtupCommand} from "./modules/environment/controllers/environment.sturtup.command";
+import { ServerCommunicationStartupCommand } from "./modules/server.communication/controllers/server.communication.startup.command";
+import { GameFlowStartupCommand } from "./modules/game.flow/controllers/game.flow.startup.command";
 
 export class StartupGame {
     constructor (gameInitData: IGameStartupData) {
@@ -34,6 +36,8 @@ export class StartupGame {
         await this.startupModule(Compiler, CompilerStartupCommand);
         await this.startupModule(UIManager, UIManagerStartupCommand, initData);
         await this.startupModule(Environment, EnvironmentSturtupCommand, initData);
+        await this.startupModule(ServerCommunicationModule, ServerCommunicationStartupCommand);
+        await this.startupModule(GameFlowModule, GameFlowStartupCommand);
 
         return gameInitData;
     }

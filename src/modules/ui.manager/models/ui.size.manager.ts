@@ -1,4 +1,3 @@
-import { UIManipulation } from "./ui.manipulation.service";
 import { IEltDimensions } from "../ui.manager.interfaces";
 
 /**

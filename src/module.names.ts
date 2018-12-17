@@ -8,3 +8,5 @@ export const ResourceLoaderModule = Notification.getInstance<IGameStartupData>('
 export const Compiler = Notification.getInstance<undefined>('COMPILER');
 export const UIManager = Notification.getInstance<IGameStartupData>('UI_MANAGER');
 export const Environment = Notification.getInstance<IGameStartupData>('ENVIRONMENT');
+export const ServerCommunicationModule = Notification.getInstance('SERVER_COMMUNICATION');
+export const GameFlowModule = Notification.getInstance('GAME_FLOW');
