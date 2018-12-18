@@ -1,5 +1,5 @@
 import {Mediator} from "../../../PureMVCMulticore/core/pureMVC/mediator/Mediator";
-import {IInitGameAreaData} from "../../game.core/common.interfaces/game.data";
+import { IGameInitData, IInitGameAreaData } from "../../game.core/common.interfaces/game.data";
 import {Notification} from "../../../PureMVCMulticore/core/pureMVC/notification/Notification";
 import {PerformMountingGame} from "../game.main.module.notifications";
 import * as PIXI from 'pixi.js'
@@ -7,12 +7,13 @@ import * as PIXI from 'pixi.js'
 export class GameAreaMediator extends Mediator {
     static NAME = 'GAME_AREA_MEDIATOR';
 
-    createGameRenderer (initRendererData: IInitGameAreaData): PIXI.Container {
+    createGameRenderer (initRendererData: IInitGameAreaData): IGameInitData {
             let game: PIXI.Application = new PIXI.Application({
                 width: initRendererData.containerWidth,
                 height: initRendererData.containerHeight,
                 resolution: 1,
-                antialias: true
+                antialias: true,
+                autoResize: true
             });
 
             let gameView = game.renderer.view;
@@ -20,7 +21,10 @@ export class GameAreaMediator extends Mediator {
 
             initRendererData.gameContainer.appendChild(game.view);
 
-            return game.stage;
+            return {
+                stage: game.stage,
+                app: game
+            };
     }
 
 

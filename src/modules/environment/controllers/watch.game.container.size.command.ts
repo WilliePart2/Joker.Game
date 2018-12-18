@@ -13,6 +13,7 @@ export class WatchGameContainerSizeCommand extends BaseCommand {
             mainWrapper: Window = window,
             environmentService: EnvironmentService = this.facade().retrieveProxy(EnvironmentService.NAME) as EnvironmentService;
 
+        environmentService.getGameDimenssions(container);
         environmentService.listenResizeEvent(mainWrapper, container);
     }
 }

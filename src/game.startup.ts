@@ -32,11 +32,11 @@ export class StartupGame {
     }
 
     async startupGame (initData: IGameStartupData): Promise<IGameInitData> {
+        await this.startupModule(Environment, EnvironmentSturtupCommand, initData);
         let gameInitData: IGameInitData = await this.startupModule(MainGameModule, GameStartupCommand, initData);
         await this.startupModule(ResourceLoaderModule, ResourceManagerStartupCommand, initData);
         await this.startupModule(Compiler, CompilerStartupCommand);
         await this.startupModule(UIManager, UIManagerStartupCommand, initData);
-        await this.startupModule(Environment, EnvironmentSturtupCommand, initData);
         await this.startupModule(ServerCommunicationModule, ServerCommunicationStartupCommand);
         await this.startupModule(GameFlowModule, GameFlowStartupCommand);
         await this.startupModule(MTCModule, MtcStartupCommand, gameInitData);

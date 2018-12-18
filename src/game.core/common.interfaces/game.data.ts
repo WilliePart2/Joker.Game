@@ -7,6 +7,7 @@ export interface IGameStartupData {
 }
 
 export interface IGameInitData {
+    app?: PIXI.Application;
     stage: PIXI.Container;
     communicationWrapper?: any; // don't used
 }
