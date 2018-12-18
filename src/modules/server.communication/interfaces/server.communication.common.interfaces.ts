@@ -1,11 +1,13 @@
+import { IGameStateSubscriptionRequest } from "./server.communications.request.interfaces";
+
 export interface IRequestHeaders {
     [ket: string]: string;
 }
 
 export interface IConnector {
-    connect: (url: string) => void;
-    onOpen: (callback: Function) => void;
-    onClose: (callback: Function) => void;
-    onMessage: (callback: (msg: string) => any) => void;
-    onError: (callback: Function) => void;
+    connect: (url: string, subscriptionData: IGameStateSubscriptionRequest) => void;
+    onOpen: (callback: (msg: MessageEvent) => void) => void;
+    onClose: (callback: (msg: MessageEvent) => void) => void;
+    onMessage: (callback: (msg: MessageEvent) => void) => void;
+    onError: (callback: (msg: MessageEvent) => void) => void;
 }

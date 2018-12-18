@@ -1,0 +1,22 @@
+export enum TTableType {
+    ONE_GAME = 'ONE_GAME',
+    TWO_GAME = 'TWO_GAME',
+    THREE_GAME = 'THREE_GAME',
+    FOUR_GAME = 'FOUR_GAME'
+}
+
+export enum TResponseTypes {
+    SUCCESS,
+    NOT_FOUND,
+    ERROR
+}
+
+export enum TGameStateTypes {
+    AWAIT_STARTING,
+    PLAYERS_CHOOSE_PLACE,
+    CARDS_DISTRIBUTION,
+    AWAIT_USER_ACTION,
+    USER_PERFORM_ACTION,
+    PASS_ACTIVE_ROLE_TO_ANOTHER_USER,
+    FINISHED
+}

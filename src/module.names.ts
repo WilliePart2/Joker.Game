@@ -10,3 +10,4 @@ export const UIManager = Notification.getInstance<IGameStartupData>('UI_MANAGER'
 export const Environment = Notification.getInstance<IGameStartupData>('ENVIRONMENT');
 export const ServerCommunicationModule = Notification.getInstance('SERVER_COMMUNICATION');
 export const GameFlowModule = Notification.getInstance('GAME_FLOW');
+export const MTCModule = Notification.getInstance<IGameInitData>('MESSAGE_TO_CLIENT');

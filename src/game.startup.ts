@@ -6,7 +6,7 @@ import {GameStartupCommand} from "./game/controllers/game.startup.command";
 import {
     BackgroundModule,
     Compiler, Environment, GameFlowModule,
-    MainGameModule,
+    MainGameModule, MTCModule,
     ResourceLoaderModule,
     RoomModule, ServerCommunicationModule,
     UIManager
@@ -19,6 +19,7 @@ import { UIManagerStartupCommand } from "./modules/ui.manager/controllers/ui.man
 import {EnvironmentSturtupCommand} from "./modules/environment/controllers/environment.sturtup.command";
 import { ServerCommunicationStartupCommand } from "./modules/server.communication/controllers/server.communication.startup.command";
 import { GameFlowStartupCommand } from "./modules/game.flow/controllers/game.flow.startup.command";
+import { MtcStartupCommand } from "./modules/mtc/controllers/mtc.startup.command";
 
 export class StartupGame {
     constructor (gameInitData: IGameStartupData) {
@@ -38,6 +39,7 @@ export class StartupGame {
         await this.startupModule(Environment, EnvironmentSturtupCommand, initData);
         await this.startupModule(ServerCommunicationModule, ServerCommunicationStartupCommand);
         await this.startupModule(GameFlowModule, GameFlowStartupCommand);
+        await this.startupModule(MTCModule, MtcStartupCommand, gameInitData);
 
         return gameInitData;
     }
