@@ -18,6 +18,7 @@ export interface IExtendedContainer extends PIXI.Container {
 export interface IGameStyle {
     textureId?: string;
     scale?: {x: number, y: number};
+    interactive?: boolean;
     [key: string]: any; // ultratype !!!
 }
 

@@ -60,10 +60,19 @@ export class StyleCompilerService extends CommonCompilerService {
     /**
      * Handle properties which need special workaround
      */
-    private handleSpecificProperties (element: PIXI.Container, style: IGameStyle): Promise<void[]> {
+    private handleSpecificProperties (element: PIXI.Container, style: IGameStyle): Promise<any> {
         return Promise.all([
             this.setTexture(element, style)
-        ]);
+        ])
+            .then(() => this.setScale(element, style))
+    }
+
+    private setScale (element: PIXI.Container, style: IGameStyle) {
+        if (style.scale) {
+            let { scale } = style;
+            element.scale = new PIXI.Point(scale.x, scale.y)
+            delete style.scale;
+        }
     }
 
     private async setTexture (element: PIXI.Container, style: IGameStyle): Promise<void> {
@@ -87,7 +96,7 @@ export class StyleCompilerService extends CommonCompilerService {
     getFinalStyleObject (styles: IGameStyle[]): IGameStyle {
         let finalStyles: IGameStyle = {} as IGameStyle;
         styles.forEach((style: IGameStyle) => {
-            deepMerge(finalStyles, style);
+            deepMerge(finalStyles, style || {});
         });
 
         return finalStyles;

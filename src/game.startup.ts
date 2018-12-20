@@ -6,7 +6,7 @@ import {GameStartupCommand} from "./game/controllers/game.startup.command";
 import {
     BackgroundModule,
     Compiler, Environment, GameFlowModule,
-    MainGameModule, MTCModule,
+    MainGameModule, MTCModule, PlayerCards,
     ResourceLoaderModule,
     RoomModule, ServerCommunicationModule,
     UIManager
@@ -20,6 +20,9 @@ import {EnvironmentSturtupCommand} from "./modules/environment/controllers/envir
 import { ServerCommunicationStartupCommand } from "./modules/server.communication/controllers/server.communication.startup.command";
 import { GameFlowStartupCommand } from "./modules/game.flow/controllers/game.flow.startup.command";
 import { MtcStartupCommand } from "./modules/mtc/controllers/mtc.startup.command";
+import { TriggerOnGameInit } from "./game/game.main.module.notifications";
+import { TriggerOnGameResize } from "./modules/environment/environment.notifications";
+import { PlayerCardsStartupCommand } from "./modules/player.cards/controller/player.cards.startup.command";
 
 export class StartupGame {
     constructor (gameInitData: IGameStartupData) {
@@ -28,7 +31,9 @@ export class StartupGame {
 
     async startup (gameInitData: IGameStartupData) {
         let initData: IGameInitData = await this.startupGame(gameInitData);
-        this.startupMainGameModules(initData);
+        await this.startupMainGameModules(initData);
+        Facade.getInstance(MainGameModule.name).sendNotification(TriggerOnGameInit, initData);
+        Facade.getInstance(Environment.name).sendNotification(TriggerOnGameResize);
     }
 
     async startupGame (initData: IGameStartupData): Promise<IGameInitData> {
@@ -44,9 +49,10 @@ export class StartupGame {
         return gameInitData;
     }
 
-    startupMainGameModules (gameInitData: IGameInitData) {
+    async startupMainGameModules (gameInitData: IGameInitData) {
+        // this.startupModule(RoomModule, RoomStartupCommand, gameInitData);
+        await this.startupModule(PlayerCards, PlayerCardsStartupCommand, gameInitData);
         this.startupModule(BackgroundModule, BackgroundStartupCommand, gameInitData);
-        this.startupModule(RoomModule, RoomStartupCommand, gameInitData);
     }
 
     startupModule <T extends Notification<any>>(moduleNotification: T, moduleCommandRef: Function, initialData?: T[keyof T]): Promise<any> {

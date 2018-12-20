@@ -19,7 +19,7 @@ export class MountGameRendererCommand extends BaseCommand {
         // let rendererMediator: GameAreaMediator = this.facade().retrieveMediator(GameAreaMediator.NAME) as GameAreaMediator;
         // rendererMediator.createGameRenderer(dataForMounting);
         let gameView: IGameInitData = await this.facade().sendNotification(PerformMountingGame, dataForMounting);
-        await this.sendNotificationToAll(SharedOnGameInit, gameView);
+        // await this.sendNotificationToAll(SharedOnGameInit, gameView);
 
         return gameView;
         // this.facade().sendNotification(StartupMainModules, {stage: gameStage} as IGameInitData);

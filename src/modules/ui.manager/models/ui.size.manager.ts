@@ -1,4 +1,5 @@
 import { IEltDimensions } from "../ui.manager.interfaces";
+import { IGameSize } from "../../../game.core/common.interfaces/game.environment";
 
 /**
  * Class which manage size of element
@@ -28,6 +29,15 @@ export class UiSizeManager {
         return this._gameStage;
     }
 
+    getGameSize (): IGameSize {
+        let gameContainer = this._getGameStage();
+
+        return {
+            gameHeight: gameContainer.clientHeight,
+            gameWidth: gameContainer.clientWidth
+        };
+    }
+
     manageSize (elt: PIXI.Container, size: IEltDimensions<string | number> | string, applyMaxSize?: boolean): void {
         if (typeof size == 'string') {
             this._applySizeInPercent(elt, size, applyMaxSize);
@@ -55,12 +65,42 @@ export class UiSizeManager {
          * If we want to scale element sides equal to each other
          */
         if (typeof size === 'string') {
-            targetWidthInPercent = parseInt(size, 10);
-            targetHeightInPercent = parseInt(size, 10);
-            let targetAbsoluteWidth: number = gameWidth * (targetWidthInPercent / 100),
-                targetAbsoluteHeight: number = gameHeight * (targetHeightInPercent / 100),
-                targetScaleX: number = targetAbsoluteWidth / eltWidth,
-                targetScaleY: number = targetAbsoluteHeight / eltHeight;
+            let targetAbsoluteWidth: number;
+            let targetAbsoluteHeight: number;
+            // let targetScaleX: number;
+            // let targetScaleY: number;
+            /**
+             * Scale relative to element size
+             */
+            // if (size.indexOf('+') !== -1) {
+            //     let addPercent: number = parseInt(size.replace('+', ''), 10);
+            //     targetAbsoluteWidth = ~~(gameWidth * ((addPercent / 100)));
+            //     targetAbsoluteHeight = ~~(gameHeight * ((addPercent / 100)));
+            //     // targetScaleX = elt.scale.x * (1 + (addPercent / 100));
+            //     // targetScaleY = elt.scale.y * (1 + (addPercent / 100));
+            // } else if (size.indexOf('-') !== -1) {
+            //     let addPercent: number = parseInt(size.replace('-', ''), 10);
+            //     targetAbsoluteWidth = gameWidth * (1 - (addPercent / 100));
+            //     targetAbsoluteHeight = gameHeight * (1 - (addPercent / 100));
+            //     // targetScaleX = elt.scale.x * (1 - (addPercent / 100));
+            //     // targetScaleY = elt.scale.y * (1 - (addPercent / 100));
+            // }
+            // /**
+            //  * Scale relative to game size
+            //  */
+            // else {
+                targetWidthInPercent = parseInt(size, 10);
+                targetHeightInPercent = parseInt(size, 10);
+                targetAbsoluteWidth = gameWidth * (targetWidthInPercent / 100);
+                targetAbsoluteHeight = gameHeight * (targetHeightInPercent / 100);
+                // targetScaleX = targetAbsoluteWidth / eltWidth;
+                // targetScaleY = targetAbsoluteHeight / eltHeight;
+            // }
+
+            // targetAbsoluteWidth = gameWidth * (targetWidthInPercent / 100);
+            // targetAbsoluteHeight = gameHeight * (targetHeightInPercent / 100);
+            let targetScaleX: number = targetAbsoluteWidth / eltWidth;
+            let targetScaleY: number = targetAbsoluteHeight / eltHeight;
 
             let finalScale = applyMaxSize ? Math.max(targetScaleX, targetScaleY) : Math.min(targetScaleX, targetScaleY);
 
@@ -116,10 +156,10 @@ export class UiSizeManager {
     }
 
     private _getAbsWidth (elt: PIXI.Container): number {
-        return elt.width / elt.scale.x;
+        return elt.width / elt.scale.x || 1;
     }
 
     private _getAbsHeight (elt: PIXI.Container): number {
-        return elt.height / elt.scale.y;
+        return elt.height / elt.scale.y || 1;
     }
 }

@@ -13,7 +13,7 @@ export function deepMerge (destinationObject: {[key: string]: any}, sourceObject
                 return;
             }
 
-            if (typeof value === 'object') {
+            if (value && typeof value === 'object') {
                 if (typeof destinationObject[key] !== 'object') {
                     destinationObject[key] = {};
                 }

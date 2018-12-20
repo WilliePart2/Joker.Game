@@ -11,14 +11,17 @@ export class EnvironmentService extends Proxy {
     resizeHandlerTimer: number;
     gameContainer: HTMLElement;
     gameAreaVO: GameAreaVO = new GameAreaVO();
+
+    setGameContainer (container: HTMLElement): void {
+        this.gameContainer = container;
+    }
+
     getGameDimenssions (gameContainer?: HTMLElement): IGameDimenssions {
-        if (gameContainer) {
-            this.gameContainer = gameContainer;
-        }
         let container: HTMLElement = gameContainer || this.gameContainer;
+
         return {
-            width: this.gameAreaVO.gameWidth = (container.clientWidth || this.gameAreaVO.gameWidth),
-            height: this.gameAreaVO.gameHeight = (container.clientHeight || this.gameAreaVO.gameHeight)
+            width: container.clientWidth,
+            height: container.clientHeight
         };
     }
 

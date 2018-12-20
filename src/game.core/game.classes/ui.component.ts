@@ -85,8 +85,20 @@ export class UIComponent {
         });
     }
 
+    // @TODO: Move this functional in module for search inside all PIXI.elements three
     getElement <T extends PIXI.Container>(elementId: string): T | null {
+        if (!this.element) {
+            return null;
+        }
+
+        if (this.element.name === elementId) {
+            return this.element as T;
+        }
+
         let element = this.element;
+        if (!element) {
+            return null;
+        }
         let neededElement: PIXI.Container = this._tryToFindChildLower(elementId);
 
         if (!neededElement) {
@@ -148,9 +160,10 @@ export class UIComponent {
     // @TODO: Think about does it normal that ui know about facade?
     // @TODO: Can we move this logic into mediator and subscribe for specific ui event?
     protected async prepareLayout (): Promise<Container> {
+        let styles: IGameStyleSheet[] = this._styles();
         let compiledElt = await this.getCompiler().sendNotification(SharedCompileElement, {
             layout: this._layout(),
-            styles: this._styles()
+            styles
         });
 
         return compiledElt;
@@ -179,7 +192,10 @@ export class UIComponent {
      */
     protected render (element: Container, startData?: any): void {
         this.element = element;
-        this.rootStage.addChild(this.element);
+        this.rootStage.addChildAt(
+            this.element,
+            this.rootStage.children.length ? this.rootStage.children.length - 1 : 0
+        );
     }
 
     /**

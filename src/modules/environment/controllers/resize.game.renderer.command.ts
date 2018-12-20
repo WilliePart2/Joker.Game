@@ -9,5 +9,6 @@ export class ResizeGameRendererCommand extends BaseCommand {
         let envService: EnvironmentService = this.facade().retrieveProxy(EnvironmentService.NAME) as EnvironmentService;
         let gameApplication: PIXI.Application = envService.getGameApplication();
         gameApplication.renderer.resize(nBody.gameWidth, nBody.gameHeight);
+
     }
 }

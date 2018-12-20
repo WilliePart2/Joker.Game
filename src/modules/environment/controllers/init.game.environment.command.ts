@@ -12,9 +12,9 @@ export class InitGameEnvironmentCommand extends BaseCommand {
         let envService: EnvironmentService = this.facade().retrieveProxy(EnvironmentService.NAME) as EnvironmentService;
         let gameSize: IGameDimenssions = envService.getGameDimenssions();
         await this.facade().sendNotification(SetEnvironmentInitData, notification.body);
-        await this.sendNotificationToAll(SharedOnGameResize, {
-            gameWidth: gameSize.width,
-            gameHeight: gameSize.height
-        })
+        // await this.sendNotificationToAll(SharedOnGameResize, {
+        //     gameWidth: gameSize.width,
+        //     gameHeight: gameSize.height
+        // })
     }
 }
