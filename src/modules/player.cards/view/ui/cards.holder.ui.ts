@@ -31,12 +31,13 @@ export class CardsHolderUI extends UIComponent {
     protected _styles(): IGameStyleSheet[] {
         let cardStyles: IGameStyle = {};
         let positionStartPoint = 0;
-        let positionXShift = 60;
+        let positionXShift = 30;
 
         for (let idx = 0; idx < CardsHolderUI.CARD_COUNT; idx++) {
             cardStyles[this.getCardClassName(idx)] = {
                 position: {
-                    x: positionStartPoint + (positionXShift * idx),
+                    // x: positionStartPoint + (positionXShift * idx),
+                    x: positionXShift * idx,
                     // y: 600
                 },
                 textureId: `${this.getCardTextureId(idx)}.png`,
@@ -70,6 +71,11 @@ export class CardsHolderUI extends UIComponent {
     }
 
     protected onInit(startData?: any): void {
+        let container = this.getElement<PIXI.Container>('PlayerCardsHolder');
+        if (container) {
+            ui(container)
+                .zIndex(0);
+        }
         this.alignCardHolder();
 
         for (let i = 0; i < CardsHolderUI.CARD_COUNT; i++) {
@@ -128,9 +134,9 @@ export class CardsHolderUI extends UIComponent {
         let cardHolder: PIXI.Container = this.getElement<PIXI.Container>('PlayerCardsHolder');
         if (cardHolder) {
             ui(cardHolder)
-                .size('100%')
+                .size('60%')
                 .position('bottom', 10)
-                .position('left', -15)
+                .position('left', -65)
         }
     }
 

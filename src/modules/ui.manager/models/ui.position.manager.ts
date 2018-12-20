@@ -16,19 +16,15 @@ export class UIPositionManager {
                 element.position.y = yPoint;
                 break;
             case 'top':
-                console.log('cork');
+                element.position.y = 0 + (gap || 0);
                 break;
             case 'right':
-                console.log('cork');
+                element.position.x = (gameSize.gameWidth - (element.width + gap));
                 break;
             case 'left':
                 element.position.x = 0 + (gap || 0);
                 break;
             case 'center':
-                // element.position = new PIXI.Point(
-                //     this._getCenterXPoint(element, gameSize),
-                //     this._getCenterYPoint(element, gameSize)
-                // );
                 element.position.x = this._getCenterXPoint(element, gameSize);
                 element.position.y = this._getCenterYPoint(element, gameSize);
                 break;
@@ -54,7 +50,7 @@ export class UIPositionManager {
         }
 
         let parent: PIXI.Container = element.parent;
-        let elt: PIXI.Container = parent.removeChild(element) as PIXI.Container;
+        parent.removeChild(element) as PIXI.Container;
         parent.addChildAt(element, zIndex);
         (element as any).zIndex = zIndex;
     }

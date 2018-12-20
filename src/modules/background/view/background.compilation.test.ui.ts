@@ -9,7 +9,7 @@ export class BackgroundCompilationTestUI extends UIComponent {
     protected _layout(): IElementTemplate {
         return {
             id: 'backgroundTestUI',
-            elementType: PIXI.Sprite,
+            elementType: PIXI.Container,
             children: [
                 {
                     id: 'bgContainer',

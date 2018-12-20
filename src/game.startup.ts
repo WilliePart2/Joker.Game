@@ -6,7 +6,7 @@ import {GameStartupCommand} from "./game/controllers/game.startup.command";
 import {
     BackgroundModule,
     Compiler, Environment, GameFlowModule,
-    MainGameModule, MTCModule, PlayerCards,
+    MainGameModule, MTCModule, PlayerCards, PlayerPlace,
     ResourceLoaderModule,
     RoomModule, ServerCommunicationModule,
     UIManager
@@ -23,6 +23,7 @@ import { MtcStartupCommand } from "./modules/mtc/controllers/mtc.startup.command
 import { TriggerOnGameInit } from "./game/game.main.module.notifications";
 import { TriggerOnGameResize } from "./modules/environment/environment.notifications";
 import { PlayerCardsStartupCommand } from "./modules/player.cards/controller/player.cards.startup.command";
+import { PlayerPlacesStartupCommand } from "./modules/player.places/controllers/player.places.startup.command";
 
 export class StartupGame {
     constructor (gameInitData: IGameStartupData) {
@@ -50,9 +51,10 @@ export class StartupGame {
     }
 
     async startupMainGameModules (gameInitData: IGameInitData) {
+        await this.startupModule(BackgroundModule, BackgroundStartupCommand, gameInitData);
         // this.startupModule(RoomModule, RoomStartupCommand, gameInitData);
         await this.startupModule(PlayerCards, PlayerCardsStartupCommand, gameInitData);
-        this.startupModule(BackgroundModule, BackgroundStartupCommand, gameInitData);
+        await this.startupModule(PlayerPlace, PlayerPlacesStartupCommand, gameInitData);
     }
 
     startupModule <T extends Notification<any>>(moduleNotification: T, moduleCommandRef: Function, initialData?: T[keyof T]): Promise<any> {

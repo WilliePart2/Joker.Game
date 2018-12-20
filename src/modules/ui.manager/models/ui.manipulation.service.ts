@@ -66,10 +66,10 @@ export class UIManipulation implements IUIManager{
                 this._applyPositionBottom(element as PIXI.Container, gameSize, gap);
                 break;
             case 'top':
-                // this._applyPositionTop(element);
+                this._applyPositionTop(element as PIXI.Container, gameSize, gap);
                 break;
             case 'right':
-                // this._applyPositionRight(element);
+                this._applyPositionRight(element as PIXI.Container, gameSize, gap);
                 break;
             case 'left':
                 this._applyPositionLeft(element as PIXI.Container, gameSize, gap);
@@ -92,16 +92,16 @@ export class UIManipulation implements IUIManager{
         this._positionManager.dispozeElement(element, 'bottom', gameSize, gap);
     }
 
-    private _applyPositionTop (element: PIXI.Container): void {
-
+    private _applyPositionTop (element: PIXI.Container, gameSize: IGameSize, gap?: number): void {
+        this._positionManager.dispozeElement(element, 'top', gameSize, gap)
     }
 
     private _applyPositionLeft (element: PIXI.Container, gameSize: IGameSize, gap?: number): void {
         this._positionManager.dispozeElement(element, 'left', gameSize, gap);
     }
 
-    private _applyPositionRight (element: PIXI.Container): void {
-
+    private _applyPositionRight (element: PIXI.Container, gameSize: IGameSize, gap?: number): void {
+        this._positionManager.dispozeElement(element, 'right', gameSize, gap);
     }
 
     private _applyPositionCenter (element: PIXI.Container, gameSize: IGameSize): void {
