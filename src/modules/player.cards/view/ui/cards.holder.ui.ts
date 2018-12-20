@@ -4,6 +4,7 @@ import { TSuitTypes } from "../TSuitTypes";
 import { TCardTypes } from "../card.types";
 import { IGameSize } from "../../../../game.core/common.interfaces/game.environment";
 import { ui } from "../../../ui.manager/shortcuts/ui";
+import { TUIChain } from "../../../../zindex.ui.values";
 
 export class CardsHolderUI extends UIComponent {
     static CARD_COUNT = 15;
@@ -74,7 +75,7 @@ export class CardsHolderUI extends UIComponent {
         let container = this.getElement<PIXI.Container>('PlayerCardsHolder');
         if (container) {
             ui(container)
-                .zIndex(0);
+                .zIndex(container.parent.children.length - 1);
         }
         this.alignCardHolder();
 
@@ -100,7 +101,8 @@ export class CardsHolderUI extends UIComponent {
         while (counter <= CardsHolderUI.CARD_COUNT) {
             if (counter === elementIndex) {
                 ui(element)
-                    .zIndex(parent.children.length - 1);
+                    // .zIndex(parent.children.length - 1);
+                    .zIndex(element.parent.children.length - 1);
             } else {
                 ui(this.getElement(
                     this.getCardId(counter)

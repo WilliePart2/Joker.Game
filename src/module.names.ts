@@ -13,3 +13,4 @@ export const GameFlowModule = Notification.getInstance('GAME_FLOW');
 export const MTCModule = Notification.getInstance<IGameInitData>('MESSAGE_TO_CLIENT');
 export const PlayerCards = Notification.getInstance<IGameInitData>('PLAYER_CARDS');
 export const PlayerPlace = Notification.getInstance<IGameInitData>('PLAYER_PLACE_INIT_DATA');
+export const CardDeck = Notification.getInstance<IGameInitData>('CARD_DECK');

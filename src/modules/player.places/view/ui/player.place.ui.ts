@@ -8,6 +8,7 @@ import {
 import { IGameSize } from "../../../../game.core/common.interfaces/game.environment";
 import { ui } from "../../../ui.manager/shortcuts/ui";
 import { PlayerPlaceClassNames, PlayerPlaceNames } from "../../player.place.names";
+import { TUIChain } from "../../../../zindex.ui.values";
 
 export class PlayerPlaceUI extends UIComponent {
     static COUNT_PLAYER_PLACES = 3;
@@ -66,7 +67,7 @@ export class PlayerPlaceUI extends UIComponent {
 
         if (container) {
             ui(container)
-                .zIndex(1);
+                .zIndex(container.parent.children.length - 1);
         }
 
         if (place1) {

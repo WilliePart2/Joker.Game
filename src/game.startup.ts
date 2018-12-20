@@ -4,7 +4,7 @@ import {Command} from "../PureMVCMulticore/core/pureMVC/command/Command";
 import {Notification} from "../PureMVCMulticore/core/pureMVC/notification/Notification";
 import {GameStartupCommand} from "./game/controllers/game.startup.command";
 import {
-    BackgroundModule,
+    BackgroundModule, CardDeck,
     Compiler, Environment, GameFlowModule,
     MainGameModule, MTCModule, PlayerCards, PlayerPlace,
     ResourceLoaderModule,
@@ -24,6 +24,7 @@ import { TriggerOnGameInit } from "./game/game.main.module.notifications";
 import { TriggerOnGameResize } from "./modules/environment/environment.notifications";
 import { PlayerCardsStartupCommand } from "./modules/player.cards/controller/player.cards.startup.command";
 import { PlayerPlacesStartupCommand } from "./modules/player.places/controllers/player.places.startup.command";
+import { CardDeckStartupCommand } from "./modules/card.deck/controllers/card.deck.startup.command";
 
 export class StartupGame {
     constructor (gameInitData: IGameStartupData) {
@@ -52,9 +53,10 @@ export class StartupGame {
 
     async startupMainGameModules (gameInitData: IGameInitData) {
         await this.startupModule(BackgroundModule, BackgroundStartupCommand, gameInitData);
+        await this.startupModule(CardDeck, CardDeckStartupCommand, gameInitData);
+        await this.startupModule(PlayerPlace, PlayerPlacesStartupCommand, gameInitData);
         // this.startupModule(RoomModule, RoomStartupCommand, gameInitData);
         await this.startupModule(PlayerCards, PlayerCardsStartupCommand, gameInitData);
-        await this.startupModule(PlayerPlace, PlayerPlacesStartupCommand, gameInitData);
     }
 
     startupModule <T extends Notification<any>>(moduleNotification: T, moduleCommandRef: Function, initialData?: T[keyof T]): Promise<any> {
